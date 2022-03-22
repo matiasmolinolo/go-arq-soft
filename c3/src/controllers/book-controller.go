@@ -100,3 +100,21 @@ func (controller *BookController) AddBook(c *fiber.Ctx) error {
 		"book":  book,
 	})
 }
+
+func (controller *BookController) GetBooksByAuthor(c *fiber.Ctx) error {
+	books, err := controller.repo.GetBooksByAuthor(c.Params("author"))
+
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+			"books": nil,
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"error": false,
+		"msg":   nil,
+		"books": books,
+	})
+}

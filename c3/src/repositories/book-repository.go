@@ -27,5 +27,19 @@ func (bookRepo *BookRepo) GetBook(title string) (models.Book, error) {
 	// Aqui se retorna el caso en el que no se encontro por lo cual hay un error
 	// Esto es un libro "vacio", ya que no se puede devolver null
 	// junto con el error
-	return models.Book{}, fmt.Errorf("Book not found: %s", title)
+	return models.Book{}, fmt.Errorf("book not found: %s", title)
+}
+
+func (bookRepo *BookRepo) GetBooksByAuthor(author string) ([]models.Book, error) {
+	var booksByAuthor []models.Book
+	for _, book := range bookRepo.bookList {
+		if book.Author == author {
+			booksByAuthor = append(booksByAuthor, book)
+		}
+	}
+	if len(booksByAuthor) == 0 {
+		booksByAuthor = append(booksByAuthor, models.Book{})
+		return booksByAuthor, fmt.Errorf("no books found by author: %s", author)
+	}
+	return booksByAuthor, nil
 }
